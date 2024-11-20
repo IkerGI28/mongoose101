@@ -10,6 +10,7 @@
             const response = await fetch('/api/ikasleak');
             const data = await response.json();
             document.getElementById('ikasleak').innerText = JSON.stringify(data, null, 2);
+            return data;
         }
 
         async function createIkasle() {
@@ -67,6 +68,21 @@
                 2
             );
         }
+
+        async function zerrendaBete() {
+            try {  
+                const ikasle = await fetchIkasleak();
+                const selectList = document.getElementById("select1");
+                ikasle.array.forEach(ikasle => {
+                    const option = document.createElement("option");
+                    option.value = ikasle._id;
+                    option.textContent = ikasle.email;
+                    selectList.appendChild(option);
+                });
+            } catch (error) {
+                next(error);
+            } 
+        }
     </script>
 </head>
 <body>
@@ -75,7 +91,7 @@
     <pre id="ikasleak"></pre>
 
     <h2>Create Ikasle</h2>
-    <form onsubmit="event.preventDefault(); createIkasle();">
+    <form onsubmit="event.preventDefault(); createIkasle(); zerrendaBete();">
         <label for="izena">Izena:</label>
         <input type="text" id="izena" name="izena" required>
         <br>
@@ -90,7 +106,7 @@
     <pre id="newIkasle"></pre>
 
     <h2>Delete Ikasle</h2>
-        <form onsubmit="event.preventDefault(); deleteIkasle()">
+        <form onsubmit="event.preventDefault(); deleteIkasle(); zerrendaBete();">
             <label>Ikasle ID:</label>
             <input id="deleteId" required>
             <br>
@@ -99,10 +115,10 @@
         </form>
 
     <h2>Edit Ikasle</h2>
-    <form onsubmit="event.preventDefault(); editIkasle()">
+    <form onsubmit="event.preventDefault(); editIkasle();">
         <label>Ikasle Email:</label>
         <select id="select1" required>
-            <option disabled selected>Choose an ikasle</option>
+            <option disabled selected value="">Choose an ikasle</option>
         </select>
         <br>
         <label>Izena:</label>
