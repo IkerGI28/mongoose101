@@ -108,11 +108,15 @@
         window.onload = () => {
             zerrendaBete();
         };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            zerrendaBete();
+        });
     </script>
 </head>
 <body>
     <h1>Test Ikasleak API</h1>
-    <button onclick="fetchIkasleak()">Get Ikasleak</button>
+    <button onclick="fetchIkasleak(); zerrendaBete();">Get Ikasleak</button>
     <pre id="ikasleak"></pre>
 
     <h2>Create Ikasle</h2>
