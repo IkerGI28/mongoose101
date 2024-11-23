@@ -28,6 +28,8 @@
 
             const data = await response.json();
             document.getElementById('newIkasle').innerText = JSON.stringify(data, null, 2);
+
+            zerrendaBete();
         }
 
         async function deleteIkasle() {
@@ -41,6 +43,8 @@
                 null,
                 2
             );
+
+            zerrendaBete();
         }
 
         async function editIkasle() {
@@ -73,7 +77,8 @@
             try {  
                 const ikasle = await fetchIkasleak();
                 const selectList = document.getElementById("select1");
-                ikasle.array.forEach(ikasle => {
+                selectList.innerHTML = '<option disabled selected value="">Choose an ikasle</option>';
+                ikasle.forEach((ikasle) => {
                     const option = document.createElement("option");
                     option.value = ikasle._id;
                     option.textContent = ikasle.email;
@@ -83,6 +88,26 @@
                 next(error);
             } 
         }
+
+        document.getElementById("select1").addEventListener("change", async function () {
+            const id = this.value;
+            if (id) {
+                try {
+                    const response = await fetch(`/api/ikasleak/${id}`);
+                    const ikasle = await response.json();
+
+                    document.getElementById("izena1").value = ikasle.izena || '';
+                    document.getElementById("adina1").value = ikasle.adina || '';
+                    document.getElementById("email1").value = ikasle.email || '';
+                } catch (error) {
+                    console.error("Error al obtener los datos del ikasle:", error);
+                }
+            }
+        });
+
+        window.onload = () => {
+            zerrendaBete();
+        };
     </script>
 </head>
 <body>
@@ -91,7 +116,7 @@
     <pre id="ikasleak"></pre>
 
     <h2>Create Ikasle</h2>
-    <form onsubmit="event.preventDefault(); createIkasle(); zerrendaBete();">
+    <form onsubmit="event.preventDefault(); createIkasle();">
         <label for="izena">Izena:</label>
         <input type="text" id="izena" name="izena" required>
         <br>
@@ -106,7 +131,7 @@
     <pre id="newIkasle"></pre>
 
     <h2>Delete Ikasle</h2>
-        <form onsubmit="event.preventDefault(); deleteIkasle(); zerrendaBete();">
+        <form onsubmit="event.preventDefault(); deleteIkasle();">
             <label>Ikasle ID:</label>
             <input id="deleteId" required>
             <br>
